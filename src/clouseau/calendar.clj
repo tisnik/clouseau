@@ -1,7 +1,7 @@
 ;;;
 ;;;   Clouseau
 ;;; 
-;;;    Copyright (C) 2015 Pavel Tisnovsky <ptisnovs@redhat.com>
+;;;    Copyright (C) 2015, 2016  Pavel Tisnovsky <ptisnovs@redhat.com>
 ;;; 
 ;;; Clouseau is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@
 
 
 (defn get-calendar
-    "Gets a calendar using the default time zone and default locale."
+    "Gets an instance of calendar using the default time zone and default locale."
     []
     (java.util.Calendar/getInstance))
 
@@ -55,7 +55,7 @@
         (.format date-format (.getTime calendar))))
 
 (defn format-date-time
-    "Format given date using the following format: 'yyyy-MM-dd HH:mm:ss'"
+    "Format given date using the following date/time format: 'yyyy-MM-dd HH:mm:ss'"
     [calendar]
     (format-date-using-desired-format calendar "yyyy-MM-dd HH:mm:ss"))
 
