@@ -1,7 +1,7 @@
 ;;;
 ;;;   Clouseau
 ;;; 
-;;;    Copyright (C) 2015 Pavel Tisnovsky <ptisnovs@redhat.com>
+;;;    Copyright (C) 2015, 2016  Pavel Tisnovsky <ptisnovs@redhat.com>
 ;;; 
 ;;; Clouseau is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -53,7 +53,8 @@
 (def cli-options
     "Definitions of all command line options currenty supported."
     ;; an option with a required argument
-    [["-p" "--port   PORT"    "port number"   :id :port]])
+    [["-p" "--port   PORT"    "port number"    :id :port]
+     ["-h" "--help"           "show this help" :id :help]])
 
 (def app
     "Definition of a Ring-based application behaviour."
@@ -83,13 +84,21 @@
         default-port
         (get-and-check-port specified-port)))
 
+(defn show-help
+    "Display brief help on the standard output."
+    [all-options]
+    (println "Usage:")
+    (println (:summary all-options)))
+
 (defn -main
     "Entry point to the Clouseau server."
     [& args]
     (let [all-options      (cli/parse-opts args cli-options)
           options          (all-options :options)
           port             (options :port)]
-          (start-server    (get-port port))))
+          (if (:help options)
+              (show-help all-options)
+              (start-server (get-port port)))))
 
 ; finito
 
