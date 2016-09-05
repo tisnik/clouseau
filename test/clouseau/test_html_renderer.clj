@@ -1,7 +1,7 @@
 ;;;
 ;;;   Clouseau
 ;;; 
-;;;    Copyright (C) 2015, 2016 Pavel Tisnovsky <ptisnovs@redhat.com>
+;;;    Copyright (C) 2015, 2016  Pavel Tisnovsky <ptisnovs@redhat.com>
 ;;; 
 ;;; Clouseau is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -112,4 +112,73 @@
     "Check that the clouseau.html-renderer/render-admin-interface definition exists."
     (testing "if the clouseau.html-renderer/render-admin-interface definition exists."
         (is (callable? 'clouseau.html-renderer/render-admin-interface))))
+
+;
+; Tests for function behaviours
+;
+
+(deftest test-render-html-header
+    "Check that the clouseau.html-renderer/render-html-header."
+    (testing "if the clouseau.html-renderer/render-html-header."
+        (is (seq (render-html-header "package")))))
+
+(deftest test-render-html-footer
+    "Check that the clouseau.html-renderer/render-html-footer."
+    (testing "if the clouseau.html-renderer/render-html-footer."
+        (is (seq (render-html-footer)))))
+
+(deftest test-render-search-field
+    "Check that the clouseau.html-renderer/render-search-field."
+    (testing "if the clouseau.html-renderer/render-search-field."
+        (is (seq (render-search-field "package")))))
+
+(deftest test-render-name-field
+    "Check that the clouseau.html-renderer/render-name-field."
+    (testing "if the clouseau.html-renderer/render-name-field."
+        (is (seq (render-name-field "user-name")))))
+
+(deftest test-render-navigation-bar-section
+    "Check that the clouseau.html-renderer/render-navigation-bar-section."
+    (testing "if the clouseau.html-renderer/render-navigation-bar-section."
+        (is (seq (render-navigation-bar-section "package" "user-name")))))
+
+(deftest test-render-description
+    "Check that the clouseau.html-renderer/render-description."
+    (testing "if the clouseau.html-renderer/render-description."
+        (is (seq (render-description "package description")))))
+
+(deftest test-render-error-page
+    "Check that the clouseau.html-renderer/render-error-page."
+    (testing "if the clouseau.html-renderer/render-error-page."
+        (is (seq (render-error-page "package" "user-name" "error message")))))
+
+(deftest test-show-info-about-update
+    "Check that the clouseau.html-renderer/show-info-about-update."
+    (testing "if the clouseau.html-renderer/show-info-about-update."
+        (is (seq (show-info-about-update "package")))))
+
+(deftest test-render-front-page
+    "Check that the clouseau.html-renderer/render-front-page."
+    (testing "if the clouseau.html-renderer/render-front-page."
+        (is (seq (render-front-page [] "package" "package-description" "ccs-description" [] [] "new description" "user-name")))))
+
+(deftest test-render-descriptions
+    "Check that the clouseau.html-renderer/render-descriptions."
+    (testing "if the clouseau.html-renderer/render-descriptions."
+        (is (seq (render-descriptions [] "user-name")))))
+
+(deftest test-render-user
+    "Check that the clouseau.html-renderer/render-user."
+    (testing "if the clouseau.html-renderer/render-user."
+        (is (seq (render-user [] "selected-user" "user-name")))))
+
+(deftest test-render-users
+    "Check that the clouseau.html-renderer/render-users."
+    (testing "if the clouseau.html-renderer/render-users."
+        (is (seq (render-users [] [] "user-name")))))
+
+(deftest test-render-admin-interface
+    "Check that the clouseau.html-renderer/render-admin-interface."
+    (testing "if the clouseau.html-renderer/render-admin-interface."
+        (is (seq (render-admin-interface [] "user-name")))))
 
