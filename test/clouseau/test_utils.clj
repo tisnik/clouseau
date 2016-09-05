@@ -174,3 +174,21 @@
         (are [x y] (= x y)
             nil (third nil))))
 
+(deftest test-substring-1
+    "Check the function clouseau.utils/substring."
+    (testing "the function clouseau.utils/substring."
+        (are [x y] (= x y)
+            "H"      (substring "Hello world!" 0 1)
+            "He"     (substring "Hello world!" 0 2)
+            "Hello"  (substring "Hello world!" 0 5)
+            "Hello " (substring "Hello world!" 0 6))))
+
+(deftest test-substring-2
+    "Check the function clouseau.utils/substring."
+    (testing "the function clouseau.utils/substring."
+        (are [x y] (= x y)
+            "w"      (substring "Hello world!" 6 7)
+            "wo"     (substring "Hello world!" 6 8)
+            "world"  (substring "Hello world!" 6 11)
+            "world!" (substring "Hello world!" 6 12))))
+
