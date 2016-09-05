@@ -1,7 +1,7 @@
 ;;;
 ;;;   Clouseau
 ;;; 
-;;;    Copyright (C) 2015 Pavel Tisnovsky <ptisnovs@redhat.com>
+;;;    Copyright (C) 2015, 2016  Pavel Tisnovsky <ptisnovs@redhat.com>
 ;;; 
 ;;; Clouseau is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -41,9 +41,13 @@
 (defn render-package-descriptions
     [package-descriptions]
     (let [sorted-descriptions (into (sorted-map) package-descriptions)]
-        (for [p sorted-descriptions]
-            (str "[" (key p) "]\n"
-                     (val p) "\n\n"))))
+        (map #(str "[" (key %) "]\n"
+                       (val %) "\n\n") sorted-descriptions)))
+
+;       ; older implementation, not idiomatic :)
+;       (for [p sorted-descriptions]
+;           (str "[" (key p) "]\n"
+;                    (val p) "\n\n"))))
 
 (defn render-front-page
     [products package package-descriptions ccs-description products-per-descriptions products-without-descriptions new-description user-name]
