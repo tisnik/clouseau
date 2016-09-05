@@ -1,7 +1,7 @@
 ;;;
 ;;;   Clouseau
 ;;; 
-;;;    Copyright (C) 2015 Pavel Tisnovsky <ptisnovs@redhat.com>
+;;;    Copyright (C) 2015, 2016  Pavel Tisnovsky <ptisnovs@redhat.com>
 ;;; 
 ;;; Clouseau is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -74,6 +74,11 @@
     (testing "if the clouseau.core/get-and-check-port definition exists."
         (is (callable? 'clouseau.core/get-and-check-port))))
 
+(deftest test-show-help-existence
+    "Check that the clouseau.core/show-help definition exists."
+    (testing "if the clouseau.core/show-help definition exists."
+        (is (callable? 'clouseau.core/show-help))))
+
 (deftest test-cli-options-def-existence
     "Check that the clouseau.core/cli-options definition exists."
     (testing "if the hostname def exists"
@@ -101,7 +106,9 @@
     (testing "the function clouseau.core/get-port."
         (is (= (get-port "1")     "1"))
         (is (= (get-port "2")     "2"))
+        (is (= (get-port "2999")  "2999"))
         (is (= (get-port "3000")  "3000"))
+        (is (= (get-port "3001")  "3001"))
         (is (= (get-port "65534") "65534"))
         (is (= (get-port "65535") "65535"))))
 
@@ -110,10 +117,16 @@
     (testing "the function clouseau.core/get-port."
         (is (= (get-port nil)     "3000"))
         (is (= (get-port "")      "3000"))
-        (is (= (get-port 0)       "3000"))
-        (is (= (get-port 1)       "3000"))
-        (is (= (get-port 65535)   "3000"))
-        (is (= (get-port 65536)   "3000"))))
+        (is (= (get-port -1)      "3000")) ; not a string
+        (is (= (get-port 0)       "3000")) ; not a string
+        (is (= (get-port 1)       "3000")) ; not a string
+        (is (= (get-port 65535)   "3000")) ; not a string
+        (is (= (get-port 65536)   "3000")))) ; not a string
+
+(deftest test-get-port-zero
+    "Check the function clouseau.core/get-port."
+    (testing "the function clouseau.core/get-port."
+        (is (thrown? AssertionError (get-port "0")))))
 
 (deftest test-get-port-negative
     "Check the function clouseau.core/get-port."
@@ -121,6 +134,12 @@
         (is (thrown? AssertionError (get-port "0")))
         (is (thrown? AssertionError (get-port "-1")))
         (is (thrown? AssertionError (get-port "-2")))
+        (is (thrown? AssertionError (get-port "-65535")))
+        (is (thrown? AssertionError (get-port "-65536")))))
+
+(deftest test-get-port-too-big
+    "Check the function clouseau.core/get-port."
+    (testing "the function clouseau.core/get-port."
         (is (thrown? AssertionError (get-port "65536")))
         (is (thrown? AssertionError (get-port "65537")))
         (is (thrown? AssertionError (get-port "1000000")))))
@@ -133,14 +152,32 @@
         (is (= (get-and-check-port "65534") "65534"))
         (is (= (get-and-check-port "65535") "65535"))))
 
+(deftest test-get-and-check-port-zero
+    "Check the function clouseau.core/get-and-check-port."
+    (testing "the function clouseau.core/get-and-check-port."
+        (is (thrown? AssertionError (get-and-check-port "0")))))
+
 (deftest test-get-and-check-port-negative
     "Check the function clouseau.core/get-and-check-port."
     (testing "the function clouseau.core/get-and-check-port."
         (is (thrown? AssertionError (get-and-check-port "-1")))
-        (is (thrown? AssertionError (get-and-check-port "0")))
+        (is (thrown? AssertionError (get-and-check-port "-2")))
+        (is (thrown? AssertionError (get-and-check-port "-65536")))
+        (is (thrown? AssertionError (get-and-check-port "-65537")))
+        (is (thrown? AssertionError (get-and-check-port "-1000000")))))
+
+(deftest test-get-and-check-port-too-big
+    "Check the function clouseau.core/get-and-check-port."
+    (testing "the function clouseau.core/get-and-check-port."
         (is (thrown? AssertionError (get-and-check-port "65536")))
         (is (thrown? AssertionError (get-and-check-port "65537")))
         (is (thrown? AssertionError (get-and-check-port "1000000")))))
+
+(deftest test-get-and-check-port-wrong-argument
+    "Check the function clouseau.core/get-and-check-port."
+    (testing "the function clouseau.core/get-and-check-port."
+        (is (thrown? NumberFormatException (get-and-check-port nil)))
+        (is (thrown? NumberFormatException (get-and-check-port "")))))
 
 (deftest test-start-server-positive-1
     (testing "clouseau.core/start-server"
@@ -149,6 +186,8 @@
             (is (= {:port 1}     (start-server "1")))
             (is (= {:port 2}     (start-server "2")))
             (is (= {:port 1000}  (start-server "1000")))
+            (is (= {:port 1234}  (start-server "1234")))
+            (is (= {:port 3000}  (start-server "3000")))
             (is (= {:port 65534} (start-server "65534")))
             (is (= {:port 65535} (start-server "65535"))))))
 
@@ -159,6 +198,7 @@
             (is (= app (start-server "1")))
             (is (= app (start-server "2")))
             (is (= app (start-server "1000")))
+            (is (= app (start-server "3000")))
             (is (= app (start-server "65534")))
             (is (= app (start-server "65535"))))))
 
@@ -166,11 +206,19 @@
     (testing "clouseau.core/start-server"
         ; use mock instead of jetty/run-jetty
         (with-redefs [jetty/run-jetty (fn [app port] port)]
+            (is (= {:port -2}      (start-server "-2")))
             (is (= {:port -1}      (start-server "-1")))
             (is (= {:port 0}       (start-server "0")))
             (is (= {:port 65536}   (start-server "65536")))
             (is (= {:port 65537}   (start-server "65537")))
             (is (= {:port 1000000} (start-server "1000000"))))))
+
+(deftest test-show-help
+    (testing "clouseau.core/show-help"
+        ; use mock instead of println function
+        (with-redefs [println (fn [string] string)]
+            (is (= "help"         (show-help {:summary "help"})))
+            (is (= "line1\nline2" (show-help {:summary "line1\nline2"}))))))
 
 (deftest test-main-basic
     (testing "clouseau.core/-main"
@@ -179,6 +227,12 @@
             (is (= {:port 3000}    (-main)))
             (is (= {:port 3000}    (-main "-1")))
             (is (= {:port 3000}    (-main "-p" "3000")))
-            (is (= {:port 9999}    (-main "-p" "9999")))
-            )))
+            (is (= {:port 9999}    (-main "-p" "9999"))))))
+
+(deftest test-main-show-help
+    (testing "clouseau.core/-main"
+        ; use mock instead of show-help function
+        (with-redefs [show-help (fn [string] "called")]
+            (is (= "called"    (-main "-h")))
+            (is (= "called"    (-main "--help"))))))
 
