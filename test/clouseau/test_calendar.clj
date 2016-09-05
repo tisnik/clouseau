@@ -1,7 +1,7 @@
 ;;;
 ;;;   Clouseau
 ;;; 
-;;;    Copyright (C) 2015 Pavel Tisnovsky <ptisnovs@redhat.com>
+;;;    Copyright (C) 2015, 2016  Pavel Tisnovsky <ptisnovs@redhat.com>
 ;;; 
 ;;; Clouseau is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -50,8 +50,10 @@
     [function-name]
     (clojure.test/function? function-name))
 
+
+
 ;
-; Tests for various functions
+; Actual tests that checks if all functions exists.
 ;
 
 (deftest test-get-calendar-existence
@@ -160,6 +162,60 @@
             (is (= "2000-02-01 10:20"  (format-date-using-desired-format calendar "yyyy-MM-dd hh:mm")))
             (is (= "2000-02-01 10:20:30"  (format-date-using-desired-format calendar "yyyy-MM-dd hh:mm:ss"))))))
 
+(deftest test-format-date-using-desired-format-4
+    "Check the function clouseau.calendar/format-date-using-desired-format: hour in a day is tested here."
+    (testing "the function clouseau.calendar/format-date-using-desired-format: hour in a day is tested here." 
+        (let [calendar (get-calendar)]
+            (.set calendar 1999 11 31 23 59 59)
+            (is (= "23:59"      (format-date-using-desired-format calendar "HH:mm")))
+            (is (= "23:59:59"   (format-date-using-desired-format calendar "HH:mm:ss")))
+            (is (= "1999-12-31 23"  (format-date-using-desired-format calendar "yyyy-MM-dd HH")))
+            (is (= "1999-12-31 23:59"  (format-date-using-desired-format calendar "yyyy-MM-dd HH:mm")))
+            (is (= "1999-12-31 23:59:59"  (format-date-using-desired-format calendar "yyyy-MM-dd HH:mm:ss"))))))
+
+(deftest test-format-date-using-desired-format-5
+    "Check the function clouseau.calendar/format-date-using-desired-format: hour in AM/PM is tested here."
+    (testing "the function clouseau.calendar/format-date-using-desired-format: hour in AM/PM is tested here." 
+        (let [calendar (get-calendar)]
+            (.set calendar 1999 11 31 23 59 59)
+            (is (= "11:59"      (format-date-using-desired-format calendar "hh:mm")))
+            (is (= "11:59:59"   (format-date-using-desired-format calendar "hh:mm:ss")))
+            (is (= "1999-12-31 11"  (format-date-using-desired-format calendar "yyyy-MM-dd hh")))
+            (is (= "1999-12-31 11:59"  (format-date-using-desired-format calendar "yyyy-MM-dd hh:mm")))
+            (is (= "1999-12-31 11:59:59"  (format-date-using-desired-format calendar "yyyy-MM-dd hh:mm:ss"))))))
+
+(deftest test-format-date-using-desired-format-6
+    "Check the function clouseau.calendar/format-date-using-desired-format: AM/PM is tested here."
+    (testing "the function clouseau.calendar/format-date-using-desired-format: AM/PM is tested here." 
+        (let [calendar (get-calendar)]
+            (.set calendar 1999 11 31 01 01 01)
+            (is (= "AM"      (format-date-using-desired-format calendar "a"))))
+        (let [calendar (get-calendar)]
+            (.set calendar 1999 11 31 11 59 59)
+            (is (= "AM"      (format-date-using-desired-format calendar "a"))))
+        (let [calendar (get-calendar)]
+            (.set calendar 1999 11 31 12 00 00)
+            (is (= "PM"      (format-date-using-desired-format calendar "a"))))
+        (let [calendar (get-calendar)]
+            (.set calendar 1999 11 31 23 59 59)
+            (is (= "PM"      (format-date-using-desired-format calendar "a"))))))
+
+(deftest test-format-date-using-desired-format-7
+    "Check the function clouseau.calendar/format-date-using-desired-format: AM/PM is tested here with the combination."
+    (testing "the function clouseau.calendar/format-date-using-desired-format: AM/PM is tested here with the combination." 
+        (let [calendar (get-calendar)]
+            (.set calendar 1999 11 31 01 01 01)
+            (is (= "01:01 AM"      (format-date-using-desired-format calendar "HH:mm a"))))
+        (let [calendar (get-calendar)]
+            (.set calendar 1999 11 31 11 59 59)
+            (is (= "11:59 AM"      (format-date-using-desired-format calendar "HH:mm a"))))
+        (let [calendar (get-calendar)]
+            (.set calendar 1999 11 31 12 00 00)
+            (is (= "12:00 PM"      (format-date-using-desired-format calendar "HH:mm a"))))
+        (let [calendar (get-calendar)]
+            (.set calendar 1999 11 31 23 59 59)
+            (is (= "23:59 PM"      (format-date-using-desired-format calendar "HH:mm a"))))))
+
 (deftest test-format-date-time-1
     "Check the function clouseau.calendar/format-date-time"
     (testing "the function clouseau.calendar/format-date-time" 
@@ -194,4 +250,18 @@
         (let [calendar (get-calendar)]
             (.set calendar 2000 00 01 00 00 00)
             (is (= "2000-01-01 00:00:00" (format-date-time calendar))))))
+
+(deftest test-format-date-time-6
+    "Check the function clouseau.calendar/format-date-time"
+    (testing "the function clouseau.calendar/format-date-time" 
+        (let [calendar (get-calendar)]
+            (.set calendar 1999 11 31 00 00 00)
+            (is (= "1999-12-31 00:00:00" (format-date-time calendar))))))
+
+(deftest test-format-date-time-7
+    "Check the function clouseau.calendar/format-date-time"
+    (testing "the function clouseau.calendar/format-date-time" 
+        (let [calendar (get-calendar)]
+            (.set calendar 1999 11 31 23 59 59)
+            (is (= "1999-12-31 23:59:59" (format-date-time calendar))))))
 
