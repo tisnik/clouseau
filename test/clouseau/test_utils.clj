@@ -192,3 +192,12 @@
             "world"  (substring "Hello world!" 6 11)
             "world!" (substring "Hello world!" 6 12))))
 
+(deftest test-substring-empty-result
+    "Check the function clouseau.utils/substring."
+    (testing "the function clouseau.utils/substring."
+        (are [x y] (= x y)
+            "" (substring "Hello world!" 0 0)
+            "" (substring "Hello world!" 1 1)
+            "" (substring "Hello world!" 2 2)
+            "" (substring "Hello world!" 10 10))))
+
