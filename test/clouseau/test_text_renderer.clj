@@ -1,7 +1,7 @@
 ;;;
 ;;;   Clouseau
 ;;; 
-;;;    Copyright (C) 2015 Pavel Tisnovsky <ptisnovs@redhat.com>
+;;;    Copyright (C) 2015, 2016  Pavel Tisnovsky <ptisnovs@redhat.com>
 ;;; 
 ;;; Clouseau is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -92,8 +92,17 @@
 (deftest test-render-package-descriptions-special-cases
     "Check the function clouseau.text-renderer/render-package-descriptions"
     (testing "the function clouseau.text-renderer/render-package-descriptions"
+        (is (= (render-package-descriptions {nil nil}) '("[]\n\n\n")))
+        (is (= (render-package-descriptions {nil "x"}) '("[]\nx\n\n")))
         (is (= (render-package-descriptions {"x" nil}) '("[x]\n\n\n")))
         (is (= (render-package-descriptions {}) '()))))
+
+(deftest test-render-package-descriptions-empty-key-or-val
+    "Check the function clouseau.text-renderer/render-package-descriptions"
+    (testing "the function clouseau.text-renderer/render-package-descriptions"
+        (is (= (render-package-descriptions {"" ""})            '("[]\n\n\n")))
+        (is (= (render-package-descriptions {"package" ""})     '("[package]\n\n\n")))
+        (is (= (render-package-descriptions {"" "description"}) '("[]\ndescription\n\n")))))
 
 (deftest test-render-package-descriptions
     "Check the function clouseau.text-renderer/render-package-descriptions"
@@ -117,5 +126,15 @@
                                              '("[package1]\ndescription1\n\n"
                                                "[package2]\ndescription2\n\n"
                                                "[package3]\ndescription3\n\n"
-                                               "[package4]\ndescription4\n\n")))))
+                                               "[package4]\ndescription4\n\n")))
+        (is (= (render-package-descriptions {"package1" "description1"
+                                             "package2" "description2"
+                                             "package3" "description3"
+                                             "package4" "description4"
+                                             "package5" "description5"})
+                                             '("[package1]\ndescription1\n\n"
+                                               "[package2]\ndescription2\n\n"
+                                               "[package3]\ndescription3\n\n"
+                                               "[package4]\ndescription4\n\n"
+                                               "[package5]\ndescription5\n\n")))))
 
