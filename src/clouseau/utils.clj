@@ -41,7 +41,7 @@
 (defn third
     "Simple utility function - returns third item from a given sequence."
     [coll]
-    (nth coll 2))
+    (get coll 2))
 
 (defn substring
     "Call method String.substring()."
