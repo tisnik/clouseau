@@ -47,13 +47,6 @@
 (require '[clouseau.text-renderer :as text-renderer])
 (require '[clouseau.db-interface  :as db-interface])
 
-(defn println-and-flush
-    "Original (println) has problem with syncing when it's called from more threads.
-     This function is a bit better because it flushes all output immediatelly."
-    [& more]
-    (.write *out* (str (clojure.string/join " " more) "\n"))
-    (flush))
-
 (defn read-description
     "Read description from the database for specified product and package."
     [product package]
