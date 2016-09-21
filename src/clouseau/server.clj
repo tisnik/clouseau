@@ -65,10 +65,10 @@
                 (.replaceAll desc "\n" "<br />")))
         (catch Exception e
             ; print error message in case of any DB-related exception
-            (println-and-flush "read-description(): error accessing database '" (:subname (second product)) "'!")
-            (println-and-flush e)
+            (log/error "read-description(): error accessing database '" (:subname (second product)) "'!")
+            (log/error e)
             (.printStackTrace e)
-            (println "***********" package)
+            (log/error "package" package)
             nil)))  ; special value that will be handled later
 
 (defn try-to-read-description
@@ -85,8 +85,8 @@
         (db-interface/read-changes-statistic)
         (catch Exception e
             ; print error message in case of any DB-related exception
-            (println-and-flush "read-changes-statistic(): Error accessing database 'css_descriptions.db'!")
-            (println-and-flush e)
+            (log/error "read-changes-statistic(): Error accessing database 'css_descriptions.db'!")
+            (log/error e)
             nil)))  ; special value that will be handled later
 
 (defn read-changes
@@ -96,8 +96,8 @@
         (db-interface/read-changes)
         (catch Exception e
             ; print error message in case of any DB-related exception
-            (println-and-flush "read-changes(): Error accessing database 'css_descriptions.db'!")
-            (println-and-flush e)
+            (log/error "read-changes(): Error accessing database 'css_descriptions.db'!")
+            (log/error e)
             nil)))  ; special value that will be handled later
 
 (defn read-changes-for-user
@@ -107,8 +107,8 @@
         (db-interface/read-changes-for-user user-name)
         (catch Exception e
             ; print error message in case of any DB-related exception
-            (println-and-flush "read-changes-for-user(): Error accessing database 'css_descriptions.db'!")
-            (println-and-flush e)
+            (log/error "read-changes-for-user(): Error accessing database 'css_descriptions.db'!")
+            (log/error e)
             nil)))  ; special value that will be handled later
 
 (defn read-package-descriptions
@@ -128,8 +128,8 @@
                 ""     ; special value that will be handled later
                 desc)) ; (.replaceAll desc "\n" "<br />"))))
         (catch Exception e
-            (println-and-flush "read-ccs-description(): Error accessing database 'css_descriptions.db'!")
-            (println-and-flush e)
+            (log/error "read-ccs-description(): Error accessing database 'css_descriptions.db'!")
+            (log/error e)
             nil)))     ; special value that will be handled later
 
 (defn try-to-read-ccs-description
@@ -165,7 +165,7 @@
     (if (and (not-empty-parameter? package) (not-empty-parameter? description))
         (let [date (calendar/format-date-time (calendar/get-calendar))]
             (db-interface/store-changes user-name package description date)
-            (println-and-flush date user-name package)
+            (log/info date user-name package)
         )))
 
 (defn delete-package
@@ -182,11 +182,10 @@
 
 (defn log-request-information
     [request]
-    (println-and-flush "time:        " (.toString (new java.util.Date)))
-    (println-and-flush "addr:        " (request :remote-addr))
-    (println-and-flush "params:      " (request :params))
-    (println-and-flush "user-agent:  " ((request :headers) "user-agent"))
-    (println-and-flush ""))
+    (log/debug "time:        " (.toString (new java.util.Date)))
+    (log/debug "addr:        " (request :remote-addr))
+    (log/debug "params:      " (request :params))
+    (log/debug "user-agent:  " ((request :headers) "user-agent")))
 
 (defn get-products-without-descriptions
     [products package-descriptions]
@@ -291,7 +290,7 @@
                 (store-ccs-description (clojure.string/lower-case trimmed-package-name) new-description)
                 (generate-response trimmed-package-name new-description output-format new-user-name old-user-name)
                 (catch Exception e
-                    (println "Error writing into database 'ccs_descriptions.db':" e)
+                    (log/error e "Error writing into database 'ccs_descriptions.db':")
                     (generate-error-response trimmed-package-name old-user-name (str "Can not write into database file 'ccs_descriptions.db': " e))))
             (generate-response trimmed-package-name new-description output-format new-user-name old-user-name))))
 
@@ -306,9 +305,9 @@
           new-description     (get params "new-description")
           new-user-name       (get params "user-name")
           old-user-name       (get (get cookies "user-name") :value)]
-          (println-and-flush "Incoming cookies: " cookies)
+          (log/debug "Incoming cookies: " cookies)
           (let [response (process package new-description output-format new-user-name old-user-name)]
-              (println-and-flush "Outgoing cookies: " (get response :cookies))
+              (log/debug "Outgoing cookies: " (get response :cookies))
               response
           )))
 
@@ -317,7 +316,7 @@
     [request]
     (let [descriptions (read-all-descriptions)
           user-name    (get (get (request :cookies) "user-name") :value)]
-        ;(println-and-flush descriptions)
+        ;(log/debug descriptions)
         (-> (http-response/response (html-renderer/render-descriptions descriptions user-name))
             (http-response/content-type "text/html"))))
 
@@ -337,8 +336,8 @@
           user-name     (get (get (request :cookies) "user-name") :value)
           selected-user (get params "name")
           changes       (read-changes-for-user selected-user)]
-          (println "User name: " selected-user)
-          ;(println "User made changes: " changes)
+          (log/debug "User name: " selected-user)
+          ;(log/debug "User made changes: " changes)
         (-> (http-response/response (html-renderer/render-user changes selected-user user-name))
             (http-response/content-type "text/html"))))
 
@@ -348,15 +347,15 @@
     (let [params           (request :params)
           user-name        (get (get (request :cookies) "user-name") :value)
           selected-package (get params "package")]
-          (println "Selected package " selected-package)
-          (println "Operation        " operation)
+          (log/debug "Selected package " selected-package)
+          (log/debug "Operation        " operation)
           (case operation
                 :delete    (delete-package    selected-package)
                 :trim      (trim-package-name selected-package)
                 :lowercase (lowercase-package-name selected-package)
                 :none      nil)
           (let [packages    (read-all-packages-provided-by-ccs)]
-              (println "Packages         " (count packages))
+              (log/debug "Packages         " (count packages))
               (-> (http-response/response (html-renderer/render-admin-interface packages user-name))
                   (http-response/content-type "text/html")))))
 
@@ -365,16 +364,16 @@
      Special value nil / HTTP response 404 is returned in case of any I/O error."
     [file-name content-type]
     (let [file (new java.io.File "www" file-name)]
-        (println-and-flush "Returning file " (.getAbsolutePath file))
+        (log/debug "Returning file " (.getAbsolutePath file))
         (if (.exists file)
             (-> (http-response/response file)
                 (http-response/content-type content-type))
-            (println-and-flush "return-file(): can not access file: " (.getName file)))))
+            (log/debug "return-file(): can not access file: " (.getName file)))))
 
 (defn handler
     "Handler that is called by Ring for all requests received from user(s)."
     [request]
-    (println-and-flush "request URI: " (request :uri))
+    (log/info "request URI: " (request :uri))
     (let [uri (request :uri)]
         (condp = uri
             "/favicon.ico"       (return-file "favicon.ico" "image/x-icon")
