@@ -229,3 +229,22 @@
             true  (contains "Hello world!" "o w")
             true  (contains "Hello world!" "world!"))))
 
+(deftest test-starts-with-1
+    "Check the function clouseau.utils/starts-with."
+    (testing "the function clouseau.utils/starts-with."
+        (are [x y] (= x y)
+            false (startsWith "Hello world!" "hello")
+            true  (startsWith "Hello world!" "Hello")
+            true  (startsWith "Hello world!" "H")
+            true  (startsWith "Hello world!" ""))))
+
+(deftest test-ends-with-1
+    "Check the function clouseau.utils/ends-with."
+    (testing "the function clouseau.utils/ends-with."
+        (are [x y] (= x y)
+            true  (endsWith "Hello world!" "Hello world!")
+            false (endsWith "Hello world!" "hello world!")
+            true  (endsWith "Hello world!" "world!")
+            true  (endsWith "Hello world!" "!")
+            true  (endsWith "Hello world!" ""))))
+
