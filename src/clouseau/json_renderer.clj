@@ -38,4 +38,5 @@
 
 (ns clouseau.json-renderer)
 
+(require '[clojure.tools.logging  :as log])
 

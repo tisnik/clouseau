@@ -40,6 +40,7 @@
 
 (require '[clojure.java.jdbc      :as jdbc])
 (require '[clouseau.db-spec       :as db-spec])
+(require '[clojure.tools.logging  :as log])
 
 (defn read-description
     [product package]

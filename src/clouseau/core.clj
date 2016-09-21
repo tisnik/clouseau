@@ -44,6 +44,7 @@
 (require '[ring.middleware.cookies :as cookies])
 
 (require '[clojure.tools.cli       :as cli])
+(require '[clojure.tools.logging   :as log])
 
 (require '[clouseau.server         :as server])
 

@@ -39,6 +39,7 @@
 (ns clouseau.server)
 
 (require '[ring.util.response     :as http-response])
+(require '[clojure.tools.logging  :as log])
 
 (require '[clouseau.products      :as products])
 (require '[clouseau.calendar      :as calendar])

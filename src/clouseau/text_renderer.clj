@@ -38,6 +38,8 @@
 
 (ns clouseau.text-renderer)
 
+(require '[clojure.tools.logging  :as log])
+
 (defn render-package-descriptions
     [package-descriptions]
     (let [sorted-descriptions (into (sorted-map) package-descriptions)]

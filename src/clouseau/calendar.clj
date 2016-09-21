@@ -41,6 +41,8 @@
 
      That functions are used along the whole application.")
 
+(require '[clojure.tools.logging :as log])
+
 
 
 (defn get-calendar

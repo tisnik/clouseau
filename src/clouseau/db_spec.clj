@@ -39,6 +39,7 @@
 (ns clouseau.db-spec
     "Namespace that contains configuration of all JDBC sources.")
 
+(require '[clojure.tools.logging  :as log])
 
 
 ;

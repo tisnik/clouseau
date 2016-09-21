@@ -38,6 +38,8 @@
 
 (ns clouseau.utils)
 
+(require '[clojure.tools.logging  :as log])
+
 (defn third
     "Simple utility function - returns third item from a given sequence."
     [coll]
