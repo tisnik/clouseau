@@ -238,8 +238,14 @@
             true  (startsWith "Hello world!" "H")
             true  (startsWith "Hello world!" ""))))
 
-(deftest test-ends-with-1
-    "Check the function clouseau.utils/ends-with."
+(deftest test-starts-with-NPE
+    "Check the function clouseau.utils/starts-with."
+    (testing "the function clouseau.utils/starts-with."
+        (is (thrown? NullPointerException (startsWith nil nil)))
+        (is (thrown? NullPointerException (startsWith "text" nil)))
+        (is (thrown? NullPointerException (startsWith nil "text")))))
+
+(deftest test-ends-with-1 "Check the function clouseau.utils/ends-with."
     (testing "the function clouseau.utils/ends-with."
         (are [x y] (= x y)
             true  (endsWith "Hello world!" "Hello world!")
@@ -247,4 +253,11 @@
             true  (endsWith "Hello world!" "world!")
             true  (endsWith "Hello world!" "!")
             true  (endsWith "Hello world!" ""))))
+
+(deftest test-ends-with-NPE
+    "Check the function clouseau.utils/ends-with."
+    (testing "the function clouseau.utils/ends-with."
+        (is (thrown? NullPointerException (endsWith nil nil)))
+        (is (thrown? NullPointerException (endsWith "text" nil)))
+        (is (thrown? NullPointerException (endsWith nil "text")))))
 
