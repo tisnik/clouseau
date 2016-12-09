@@ -191,6 +191,10 @@
     "Check the function clouseau.utils/third."
     (testing "the function clouseau.utils/third."
         (are [x y] (= x y)
+            nil (third [])
+            nil (third '())
+            nil (third [1])
+            nil (third '(1))
             nil (third [1 2])
             nil (third '(1 2)))))
 
