@@ -59,6 +59,12 @@
         (is (callable? 'clouseau.utils/third))))
 
 
+(deftest test-fourth-existence
+    "Check that the clouseau.utils/fourth definition exists."
+    (testing "if the clouseau.utils/fourth definition exists."
+        (is (callable? 'clouseau.utils/fourth))))
+
+
 (deftest test-substring-existence
     "Check that the clouseau.utils/substring definition exists."
     (testing "if the clouseau.utils/substring definition exists."
