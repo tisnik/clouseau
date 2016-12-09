@@ -45,6 +45,11 @@
     [coll]
     (nth coll 2 nil))
 
+(defn fourth
+    "Simple utility function - returns fourth item from a given sequence, nil if third item does not exist."
+    [coll]
+    (nth coll 3 nil))
+
 (defn substring
     "Call method String.substring()."
     ([^String s from to]
