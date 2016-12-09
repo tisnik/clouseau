@@ -204,6 +204,33 @@
         (are [x y] (= x y)
             nil (third nil))))
 
+(deftest test-fourth-1
+    "Check the function clouseau/fourth."
+    (testing "the function clouseau/fourth."
+        (are [x y] (= x y)
+            4 (fourth [1 2 3 4 5])
+            4 (fourth '(1 2 3 4))
+            4 (fourth '(1 2 3 4 5)))))
+
+(deftest test-fourth-2
+    "Check the function clouseau/fourth."
+    (testing "the function clouseau/fourth."
+        (are [x y] (= x y)
+            nil (fourth [])
+            nil (fourth '())
+            nil (fourth [1])
+            nil (fourth '(1))
+            nil (fourth [1 2])
+            nil (fourth '(1 2))
+            nil (fourth [1 2 3])
+            nil (fourth '(1 2 3)))))
+
+(deftest test-fourth-not-NPE
+    "Check the function clouseau/fourth."
+    (testing "the function clouseau/fourth."
+        (are [x y] (= x y)
+            nil (fourth nil))))
+
 (deftest test-substring-1
     "Check the function clouseau.utils/substring."
     (testing "the function clouseau.utils/substring."
