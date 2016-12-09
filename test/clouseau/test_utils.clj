@@ -309,6 +309,15 @@
             true  (startsWith "Hello world!" "H")
             true  (startsWith "Hello world!" ""))))
 
+(deftest test-starts-with-2
+    "Check the function clouseau.utils/starts-with."
+    (testing "the function clouseau.utils/starts-with."
+        (are [x y] (= x y)
+            false (startsWith "" "hello")
+            false (startsWith "" "Hello")
+            false (startsWith "" "H")
+            true  (startsWith "" ""))))
+
 (deftest test-starts-with-NPE
     "Check the function clouseau.utils/starts-with."
     (testing "the function clouseau.utils/starts-with."
