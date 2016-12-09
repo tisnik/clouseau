@@ -268,6 +268,13 @@
             "" (substring "Hello world!" 2 2)
             "" (substring "Hello world!" 10 10))))
 
+(deftest test-substring-NPE
+    "Check the function clouseau.utils/substring."
+    (testing "the function clouseau.utils/substring."
+        (is (thrown? NullPointerException (substring nil 0 0)))
+        (is (thrown? NullPointerException (substring "" nil 0)))
+        (is (thrown? NullPointerException (substring "" 0 nil)))))
+
 (deftest test-contains-1
     "Check the function clouseau.utils/contains."
     (testing "the function clouseau.utils/contains."
@@ -285,6 +292,13 @@
             true  (contains "Hello world!" "Hello")
             true  (contains "Hello world!" "o w")
             true  (contains "Hello world!" "world!"))))
+
+(deftest test-contains-NPE
+    "Check the function clouseau.utils/contains."
+    (testing "the function clouseau.utils/contains."
+        (is (thrown? NullPointerException (contains nil "")))
+        (is (thrown? NullPointerException (contains "" nil)))
+        (is (thrown? NullPointerException (contains nil nil)))))
 
 (deftest test-starts-with-1
     "Check the function clouseau.utils/starts-with."
