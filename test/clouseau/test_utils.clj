@@ -100,6 +100,26 @@
     (testing "if the clouseau.utils/get-exception-message definition exists."
         (is (callable? 'clouseau.utils/get-exception-message))))
 
+
+(deftest test-parse-int-existence
+    "Check that the clouseau.utils/parse-int definition exists."
+    (testing "if the clouseau.utils/parse-int definition exists."
+        (is (callable? 'clouseau.utils/parse-int))))
+
+
+(deftest test-parse-float-existence
+    "Check that the clouseau.utils/parse-float definition exists."
+    (testing "if the clouseau.utils/parse-float definition exists."
+        (is (callable? 'clouseau.utils/parse-float))))
+
+
+(deftest test-parse-boolean-existence
+    "Check that the clouseau.utils/parse-boolean definition exists."
+    (testing "if the clouseau.utils/parse-boolean definition exists."
+        (is (callable? 'clouseau.utils/parse-boolean))))
+
+
+
 ;
 ; Tests for behaviour of all functions
 ;
