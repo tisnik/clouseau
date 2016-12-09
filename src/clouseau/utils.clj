@@ -82,3 +82,19 @@
     [^java.lang.Exception exception]
     (.getMessage exception))
 
+(defn parse-int
+    "Parse the given string as an integer number."
+    [^String string]
+    (java.lang.Integer/parseInt string))
+
+(defn parse-float
+    "Parse the given string as a float number."
+    [^String string]
+    (java.lang.Float/parseFloat string))
+
+(defn parse-boolean
+    "Parse the given string as a boolean value."
+    [string]
+    (or (= string "true")
+        (= string "True")))
+
