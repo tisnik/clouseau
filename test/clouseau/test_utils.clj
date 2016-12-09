@@ -334,6 +334,15 @@
             true  (endsWith "Hello world!" "!")
             true  (endsWith "Hello world!" ""))))
 
+(deftest test-ends-with-2
+    "Check the function clouseau.utils/ends-with."
+    (testing "the function clouseau.utils/ends-with."
+        (are [x y] (= x y)
+            false (endsWith "" "hello")
+            false (endsWith "" "Hello")
+            false (endsWith "" "H")
+            true  (endsWith "" ""))))
+
 (deftest test-ends-with-NPE
     "Check the function clouseau.utils/ends-with."
     (testing "the function clouseau.utils/ends-with."
