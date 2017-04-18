@@ -350,3 +350,21 @@
         (is (thrown? NullPointerException (endsWith "text" nil)))
         (is (thrown? NullPointerException (endsWith nil "text")))))
 
+(deftest test-replaceAll-1
+    "Check the function emender-jenkins.utils/replaceAll."
+    (testing "the function emender-jenkins.utils/replaceAll."
+        (are [x y] (= x y)
+            ""    (replaceAll "" "" "")
+            "b"   (replaceAll "a" "a" "b")
+            "bb"  (replaceAll "aa" "a" "b")
+            "bcb" (replaceAll "aca" "a" "b"))))
+
+(deftest test-replaceAll-2
+    "Check the function emender-jenkins.utils/replaceAll."
+    (testing "the function emender-jenkins.utils/replaceAll."
+        (are [x y] (= x y)
+            "b"     (replaceAll "aa" "aa" "b")
+            "bb"    (replaceAll "aaaa" "aa" "b")
+            "xbbx"  (replaceAll "xaaaax" "aa" "b")
+            "xbxbx" (replaceAll "xaaxaax" "aa" "b"))))
+
