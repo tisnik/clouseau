@@ -39,4 +39,31 @@
 
 (ns clouseau.descriptions)
 
+(require '[clojure.tools.logging  :as log])
+
+(require '[clouseau.db-interface  :as db-interface])
+
+(defn read-description
+    "Read description from the database for specified product and package."
+    [product package]
+    (try
+        (let [result (db-interface/read-description product package)
+              desc   (:description (first result))]
+            (if (not desc)
+                ""  ; special value that will be handled later
+                (.replaceAll desc "\n" "<br />")))
+        (catch Exception e
+            ; print error message in case of any DB-related exception
+            (log/error "read-description(): error accessing database '" (:subname (second product)) "'!")
+            (log/error e)
+            (.printStackTrace e)
+            (log/error "package" package)
+            nil)))  ; special value that will be handled later
+
+(defn try-to-read-description
+    "Read package description, but only when package is specified."
+    [product package]
+    (if package
+        (read-description product package)
+        ""))
 
