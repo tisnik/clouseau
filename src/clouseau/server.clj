@@ -46,40 +46,8 @@
 (require '[clouseau.html-renderer :as html-renderer])
 (require '[clouseau.text-renderer :as text-renderer])
 (require '[clouseau.db-interface  :as db-interface])
+(require '[clouseau.changes       :as changes])
 (require '[clouseau.descriptions  :as descriptions])
-
-(defn read-changes-statistic
-    "Read number of changes made by all users."
-    []
-    (try
-        (db-interface/read-changes-statistic)
-        (catch Exception e
-            ; print error message in case of any DB-related exception
-            (log/error "read-changes-statistic(): Error accessing database 'css_descriptions.db'!")
-            (log/error e)
-            nil)))  ; special value that will be handled later
-
-(defn read-changes
-    "Read all changes made by all users."
-    []
-    (try
-        (db-interface/read-changes)
-        (catch Exception e
-            ; print error message in case of any DB-related exception
-            (log/error "read-changes(): Error accessing database 'css_descriptions.db'!")
-            (log/error e)
-            nil)))  ; special value that will be handled later
-
-(defn read-changes-for-user
-    "Read all changes made by specific user."
-    [user-name]
-    (try
-        (db-interface/read-changes-for-user user-name)
-        (catch Exception e
-            ; print error message in case of any DB-related exception
-            (log/error "read-changes-for-user(): Error accessing database 'css_descriptions.db'!")
-            (log/error e)
-            nil)))  ; special value that will be handled later
 
 (defn read-package-descriptions
     [products package]
@@ -128,15 +96,6 @@
     "Returns true if given parameter is not null and not empty at the same time."
     [parameter]
     (and parameter (not (empty? parameter))))
-
-(defn store-changes
-    "Store changes into the 'changes' table."
-    [user-name package description]
-    (if (and (not-empty-parameter? package) (not-empty-parameter? description))
-        (let [date (calendar/format-date-time (calendar/get-calendar))]
-            (db-interface/store-changes user-name package description date)
-            (log/info date user-name package)
-        )))
 
 (defn delete-package
     [package-name]
@@ -191,7 +150,7 @@
     [products package package-descriptions ccs-description
      products-per-description products-without-descriptions new-description user-name]
      (let [html-output (html-renderer/render-front-page products package package-descriptions ccs-description products-per-description products-without-descriptions new-description user-name)]
-        (store-changes user-name package new-description)
+        (changes/store-changes user-name package new-description)
         (if user-name
             (-> (http-response/response html-output)
                 (http-response/set-cookie :user-name user-name {:max-age 36000000})
@@ -204,7 +163,7 @@
     [products package package-descriptions ccs-description
      products-per-description products-without-descriptions new-description user-name]
      (let [text-output (text-renderer/render-front-page products package package-descriptions ccs-description products-per-description products-without-descriptions new-description user-name)]
-        (store-changes user-name package new-description)
+        (changes/store-changes user-name package new-description)
             (-> (http-response/response text-output)
                 (http-response/content-type "text/plain"))))
 
@@ -293,8 +252,8 @@
 (defn render-users-info
     "Create page containing user info(s) for all users."
     [request]
-    (let [changes-statistic (read-changes-statistic)
-          changes           (read-changes)
+    (let [changes-statistic (changes/read-changes-statistic)
+          changes           (changes/read-changes)
           user-name         (get (get (request :cookies) "user-name") :value)]
         (-> (http-response/response (html-renderer/render-users changes-statistic changes user-name))
             (http-response/content-type "text/html"))))
@@ -305,7 +264,7 @@
     (let [params        (request :params)
           user-name     (get (get (request :cookies) "user-name") :value)
           selected-user (get params "name")
-          changes       (read-changes-for-user selected-user)]
+          changes       (changes/read-changes-for-user selected-user)]
           (log/debug "User name: " selected-user)
           ;(log/debug "User made changes: " changes)
         (-> (http-response/response (html-renderer/render-user changes selected-user user-name))

@@ -39,4 +39,50 @@
 
 (ns clouseau.changes)
 
+(require '[clojure.tools.logging  :as log])
+
+(require '[clouseau.calendar      :as calendar])
+(require '[clouseau.db-interface  :as db-interface])
+
+(defn read-changes-statistic
+    "Read number of changes made by all users."
+    []
+    (try
+        (db-interface/read-changes-statistic)
+        (catch Exception e
+            ; print error message in case of any DB-related exception
+            (log/error "read-changes-statistic(): Error accessing database 'css_descriptions.db'!")
+            (log/error e)
+            nil)))  ; special value that will be handled later
+
+(defn read-changes
+    "Read all changes made by all users."
+    []
+    (try
+        (db-interface/read-changes)
+        (catch Exception e
+            ; print error message in case of any DB-related exception
+            (log/error "read-changes(): Error accessing database 'css_descriptions.db'!")
+            (log/error e)
+            nil)))  ; special value that will be handled later
+
+(defn read-changes-for-user
+    "Read all changes made by specific user."
+    [user-name]
+    (try
+        (db-interface/read-changes-for-user user-name)
+        (catch Exception e
+            ; print error message in case of any DB-related exception
+            (log/error "read-changes-for-user(): Error accessing database 'css_descriptions.db'!")
+            (log/error e)
+            nil)))  ; special value that will be handled later
+
+(defn store-changes
+    "Store changes into the 'changes' table."
+    [user-name package description]
+    (if (and (seq package) (seq description))
+        (let [date (calendar/format-date-time (calendar/get-calendar))]
+            (db-interface/store-changes user-name package description date)
+            (log/info date user-name package)
+        )))
 
