@@ -454,4 +454,28 @@
         0.0 (parse-float "-00")
         0.0 (parse-float "-000")))
 
+(deftest test-parse-float-positive-values
+    "Check the behaviour of function emender-jenkins.config/parse-float."
+    (are [x y] (== x y)
+        0.5 (parse-float "0.5")
+        1.0 (parse-float "1.0")
+        1.5 (parse-float "1.5")
+        2.0 (parse-float "2")
+        1000.0 (parse-float "1000")
+        10000.0 (parse-float "10000")
+        1e10 (parse-float "10000000000")
+        1e10 (parse-float "1e10")))
+
+(deftest test-parse-float-negative-values
+    "Check the behaviour of function emender-jenkins.config/parse-float."
+    (are [x y] (== x y)
+        -0.5 (parse-float "-0.5")
+        -1.0 (parse-float "-1.0")
+        -1.5 (parse-float "-1.5")
+        -2.0 (parse-float "-2")
+        -1000.0 (parse-float "-1000")
+        -10000.0 (parse-float "-10000")
+        -1e10 (parse-float "-10000000000")
+        -1e10 (parse-float "-1e10")))
+
 
