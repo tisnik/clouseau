@@ -368,6 +368,19 @@
             "xbbx"  (replaceAll "xaaaax" "aa" "b")
             "xbxbx" (replaceAll "xaaxaax" "aa" "b"))))
 
+(deftest test-replaceAll-not-NPE
+    "Check the function emender-jenkins.utils/replaceAll."
+    (testing "the function emender-jenkins.utils/replaceAll."
+        (is (= "a" (replaceAll "a" "b" nil)))))
+
+(deftest test-replaceAll-NPE
+    "Check the function emender-jenkins.utils/replaceAll."
+    (testing "the function emender-jenkins.utils/replaceAll."
+        (is (thrown? NullPointerException (replaceAll nil "a" "b")))
+        (is (thrown? NullPointerException (replaceAll "a" nil "b")))
+        (is (thrown? NullPointerException (replaceAll "a" "a" nil)))
+        (is (thrown? NullPointerException (replaceAll nil nil "b")))))
+
 (deftest test-parse-boolean
     "Check the behaviour of function emender-jenkins.config/parse-boolean."
     (are [x y] (= x y)
