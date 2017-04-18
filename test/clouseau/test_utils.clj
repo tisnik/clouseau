@@ -368,3 +368,14 @@
             "xbbx"  (replaceAll "xaaaax" "aa" "b")
             "xbxbx" (replaceAll "xaaxaax" "aa" "b"))))
 
+(deftest test-parse-boolean
+    "Check the behaviour of function emender-jenkins.config/parse-boolean."
+    (are [x y] (= x y)
+        true (parse-boolean "true")
+        true (parse-boolean "True")
+        false (parse-boolean "false")
+        false (parse-boolean "False")
+        false (parse-boolean "")
+        false (parse-boolean "unknown")
+        false (parse-boolean nil)))
+
