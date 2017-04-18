@@ -444,4 +444,14 @@
         (parse-int "xyzzy")))
        ; (parse-int "+1"))) ; removed, not compatible with all supported JDKs
 
+(deftest test-parse-float-zero
+    "Check the behaviour of function emender-jenkins.config/parse-float."
+    (are [x y] (== x y)
+        0.0 (parse-float "0")
+        0.0 (parse-float "00")
+        0.0 (parse-float "000")
+        0.0 (parse-float "-0")
+        0.0 (parse-float "-00")
+        0.0 (parse-float "-000")))
+
 
