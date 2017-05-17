@@ -1,7 +1,7 @@
 ;;;
 ;;;   Clouseau
 ;;; 
-;;;    Copyright (C) 2015 Pavel Tisnovsky <ptisnovs@redhat.com>
+;;;    Copyright (C) 2015, 2016, 2017  Pavel Tisnovsky <ptisnovs@redhat.com>
 ;;; 
 ;;; Bytecode synth is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -42,6 +42,8 @@
     :license {:name "Eclipse Public License"
               :url "http://www.eclipse.org/legal/epl-v10.html"}
     :dependencies [[org.clojure/clojure "1.7.0"]
+                   [irclj "0.5.0-alpha4"]
+                   [clojure-ini "0.0.1"]
                    [org.clojure/java.jdbc "0.3.5"]
                    [org.clojure/tools.cli "0.3.1"]
                    [org.xerial/sqlite-jdbc "3.7.2"]
