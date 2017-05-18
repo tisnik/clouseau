@@ -46,7 +46,10 @@
 (require '[clojure.tools.cli       :as cli])
 (require '[clojure.tools.logging   :as log])
 
+(require '[clouseau.config         :as config])
 (require '[clouseau.server         :as server])
+(require '[clouseau.dyncfg         :as dyncfg])
+(require '[clouseau.irc-bot        :as irc-bot])
 
 (def default-port
     "3000")
@@ -68,6 +71,13 @@
     [port]
     (println "Starting the server at the port: " port)
     (jetty/run-jetty app {:port (read-string port)}))
+
+(defn start-bot
+    []
+    (let [config (config/load-configuration "config.ini")]
+        (config/print-configuration config)
+        (reset! dyncfg/configuration config)
+        (irc-bot/start-irc-bot (:server config))))
 
 (defn get-and-check-port
     "Accepts port number represented by string and throws AssertionError
@@ -99,7 +109,8 @@
           port             (options :port)]
           (if (:help options)
               (show-help all-options)
-              (start-server (get-port port)))))
+              (do (start-bot)
+                  (start-server (get-port port))))))
 
 ; finito
 
