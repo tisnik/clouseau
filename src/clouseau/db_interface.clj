@@ -62,6 +62,18 @@
     [package]
     (jdbc/query db-spec/ccs-db (str "select description from packages where lower(name)='" (clojure.string/lower-case package) "';")))
 
+(defn read-ccs-description-count
+    []
+    (-> (jdbc/query db-spec/ccs-db (str "select count(description) as cnt from packages"))
+        first
+        :cnt))
+
+(defn read-first-ccs-description
+    [package]
+    (-> (jdbc/query db-spec/ccs-db (str "select description from packages where lower(name)='" (clojure.string/lower-case package) "';"))
+        first
+        :description))
+
 (defn read-all-descriptions
     []
     ; we need to use trim() here because some package names starts with one space or even with more spaces
