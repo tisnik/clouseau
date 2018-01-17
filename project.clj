@@ -1,7 +1,7 @@
 ;;;
 ;;;   Clouseau
 ;;; 
-;;;    Copyright (C) 2015, 2016, 2017  Pavel Tisnovsky <ptisnovs@redhat.com>
+;;;    Copyright (C) 2015, 2016, 2017, 2018  Pavel Tisnovsky <ptisnovs@redhat.com>
 ;;; 
 ;;; Bytecode synth is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -43,19 +43,21 @@
               :url "http://www.eclipse.org/legal/epl-v10.html"}
     :dependencies [[org.clojure/clojure "1.7.0"]
                    [irclj "0.5.0-alpha4"]
-                   [clojure-ini "0.0.1"]
                    [org.clojure/java.jdbc "0.3.5"]
                    [org.clojure/tools.cli "0.3.1"]
                    [org.xerial/sqlite-jdbc "3.7.2"]
+                   [clojure-ini "0.0.1"]
                    [ring/ring-core "1.3.2"]
                    [ring/ring-jetty-adapter "1.3.2"]
+                   [hiccup "1.0.4"]
                    [org.clojure/tools.logging "0.3.1"]
                    [log4j/log4j "1.2.17" :exclusions [javax.mail/mail
                                                       javax.jms/jms
                                                       com.sun.jmdk/jmxtools
                                                       com.sun.jmx/jmxri]]
-                   [hiccup "1.0.4"]
+                   [org.slf4j/slf4j-log4j12 "1.6.6"]
                    [org.clojars.tisnik/clj-utils "0.1.0-SNAPSHOT"]
+                   [org.clojars.tisnik/clj-middleware "0.1.0-SNAPSHOT"]
                    [org.clojars.tisnik/clj-config-loader "0.1.0-SNAPSHOT"]
                    [org.clojars.tisnik/clj-fileutils "0.2.0-SNAPSHOT"]]
     :dev-dependencies [[lein-ring "0.8.10"]]
