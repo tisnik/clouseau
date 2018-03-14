@@ -1,7 +1,7 @@
 ;;;
 ;;;   Clouseau
 ;;; 
-;;;    Copyright (C) 2017  Pavel Tisnovsky <ptisnovs@redhat.com>
+;;;    Copyright (C) 2017, 2018  Pavel Tisnovsky <ptisnovs@redhat.com>
 ;;; 
 ;;; Clouseau is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
